@@ -1,0 +1,59 @@
+import 'package:flutter/material.dart';
+
+class NextPickupCard extends StatelessWidget {
+  const NextPickupCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 10,
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          const Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "موعد الرفع القادم",
+                  style: TextStyle(fontSize: 13, color: Colors.grey),
+                ),
+                SizedBox(height: 5),
+                Text(
+                  "الأحد: 6:00 - 8:00 صباحاً",
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+            decoration: BoxDecoration(
+              color: Colors.orange,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: const Text(
+              "غداً",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          const SizedBox(width: 15),
+          const Icon(Icons.timer_outlined, color: Color(0xFF27ae60), size: 35),
+        ],
+      ),
+    );
+  }
+}

@@ -1,26 +1,38 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:seiyun_reports_app/screens/Auth.dart';
-import 'package:seiyun_reports_app/screens/Home.dart';
+import 'package:provider/provider.dart';
+import 'package:seiyun_reports_app/screens/auth/view/auth_screen.dart';
+import 'package:seiyun_reports_app/screens/home/view/home_screen.dart';
+import 'package:seiyun_reports_app/screens/auth/viewmodel/auth_viewmodel.dart';
+import 'package:seiyun_reports_app/screens/home/viewmodel/home_viewmodel.dart';
+import 'package:seiyun_reports_app/screens/report/viewmodel/report_viewmodel.dart';
+import 'package:seiyun_reports_app/viewmodels/notification_viewmodel.dart';
+import 'package:seiyun_reports_app/screens/my_reports/viewmodel/my_reports_viewmodel.dart';
+import 'package:seiyun_reports_app/screens/news_tips/viewmodel/news_tips_viewmodel.dart';
+import 'package:seiyun_reports_app/screens/profile/viewmodel/profile_viewmodel.dart';
+import 'package:seiyun_reports_app/core/theme/app_theme.dart';
 import 'firebase_options.dart';
-
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthViewModel()),
+        ChangeNotifierProvider(create: (_) => HomeViewModel()),
+        ChangeNotifierProvider(create: (_) => ReportViewModel()),
+        ChangeNotifierProvider(create: (_) => NotificationViewModel()),
+        ChangeNotifierProvider(create: (_) => MyReportsViewModel()),
+        ChangeNotifierProvider(create: (_) => NewsTipsViewModel()),
+        ChangeNotifierProvider(create: (_) => ProfileViewModel()),
+      ],
+      child: const MyApp(),
+    ),
   );
-
-  runApp(const MyApp());
 }
-
-// تعريف الثيم والألوان بشكل منظم
-var myColorScheme = ColorScheme.fromSeed(
-  seedColor: const Color(0xFF2E7D32), // اللون الأخضر الأساسي لتطبيقك
-  primary: const Color(0xFF2E7D32),
-  secondary: const Color(0xFF5D4037), // اللون البني
-);
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -29,35 +41,20 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      locale: Locale('ar', 'YE'),
+      locale: const Locale('ar', 'YE'),
       title: 'Seiyun Reports App',
-
-      // 1. إعدادات الثيم (Theme)
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: myColorScheme,
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF5D4037),
-            foregroundColor: Colors.white,
-          ),
-        ),
-      ),
-
+      theme: AppTheme.lightTheme,
       home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
-          // إذا كان التطبيق لا يزال يتصل بـ Firebase
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Scaffold(
               body: Center(child: CircularProgressIndicator()),
             );
           }
-          // إذا وجد بيانات مستخدم (مسجل دخول)
           if (snapshot.hasData) {
-            return  HomeScreen();
+            return HomeScreen();
           }
-          // إذا لم يجد مستخدم (غير مسجل)
           return const AuthScreen();
         },
       ),

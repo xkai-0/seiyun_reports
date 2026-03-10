@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-
-// تعريف الألوان الأساسية
-const primaryGreen = Color(0xFF2E7D32);
-const accentGreen = Color(0xFF81C784);
-const primaryBrown = Color(0xFF5D4037);
+import 'package:seiyun_reports_app/core/theme/app_theme.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
@@ -40,20 +36,22 @@ class _WelcomePageState extends State<WelcomePage> {
               OnboardingContent(
                 icon: Icons.eco_rounded,
                 title: 'مرحباً بك في عالم الاستدامة!',
-                description: 'رحلتك نحو غدٍ أفضل تبدأ من هنا. لنعمل معاً من أجل كوكبنا.',
-                iconColor: accentGreen,
+                description:
+                    'رحلتك نحو غدٍ أفضل تبدأ من هنا. لنعمل معاً من أجل كوكبنا.',
+                iconColor: AppTheme.accentGreen,
               ),
               OnboardingContent(
                 icon: Icons.public_rounded,
                 title: 'حافظ على بيئتنا',
-                description: 'كل عمل صغير يحدث فرقاً كبيراً. اجعل بصمتك خضراء دائماً.',
-                iconColor: primaryGreen,
+                description:
+                    'كل عمل صغير يحدث فرقاً كبيراً. اجعل بصمتك خضراء دائماً.',
+                iconColor: AppTheme.primaryGreen,
               ),
               OnboardingContent(
                 icon: Icons.recycling_rounded,
                 title: 'شارك في التغيير',
                 description: 'انضم إلى مجتمعنا وكن جزءاً من الحل لا المشكلة.',
-                iconColor: primaryBrown,
+                iconColor: AppTheme.primaryBrown,
               ),
             ],
           ),
@@ -90,7 +88,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   onPressed: () {
                     if (_currentPage == 2) {
                       // الانتقال لصفحة التسجيل (SignupScreen)
-                      print("الانتقال لصفحة التسجيل");
+                      debugPrint("الانتقال لصفحة التسجيل");
                     } else {
                       _pageController.nextPage(
                         duration: const Duration(milliseconds: 500),
@@ -99,15 +97,21 @@ class _WelcomePageState extends State<WelcomePage> {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: primaryGreen,
-                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                    backgroundColor: AppTheme.primaryGreen,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 40,
+                      vertical: 15,
+                    ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
                   child: Text(
                     _currentPage == 2 ? "لنبدأ" : "التالي",
-                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
@@ -126,7 +130,10 @@ class _WelcomePageState extends State<WelcomePage> {
       height: 10,
       width: _currentPage == index ? 25 : 10,
       decoration: BoxDecoration(
-        color: _currentPage == index ? primaryGreen : Colors.grey.shade300,
+        color:
+            _currentPage == index
+                ? AppTheme.primaryGreen
+                : Colors.grey.shade300,
         borderRadius: BorderRadius.circular(5),
       ),
     );

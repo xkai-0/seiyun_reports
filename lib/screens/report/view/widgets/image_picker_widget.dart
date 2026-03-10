@@ -1,0 +1,102 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:seiyun_reports_app/screens/report/viewmodel/report_viewmodel.dart';
+
+class ImagePickerWidget extends StatelessWidget {
+  const ImagePickerWidget({super.key});
+
+  void _showPicker(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+      ),
+      builder: (BuildContext bc) {
+        return SafeArea(
+          child: Wrap(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text('المعرض'),
+                onTap: () {
+                  context.read<ReportViewModel>().pickImage(
+                    ImageSource.gallery,
+                  );
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_camera),
+                title: const Text('الكاميرا'),
+                onTap: () {
+                  context.read<ReportViewModel>().pickImage(ImageSource.camera);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final reportVM = context.watch<ReportViewModel>();
+
+    return GestureDetector(
+      onTap: () => _showPicker(context),
+      child: Container(
+        width: double.infinity,
+        height: 200, // زيادة الطول قليلاً لعرض الصورة بشكل أوضح
+        decoration: BoxDecoration(
+          color: const Color(0xFFf8fafc),
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: const Color(0xFFcbd5e1), width: 2),
+          image:
+              reportVM.image != null
+                  ? DecorationImage(
+                    image: FileImage(reportVM.image!),
+                    fit: BoxFit.cover,
+                  )
+                  : null,
+        ),
+        child:
+            reportVM.image == null
+                ? const Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.camera_alt_outlined,
+                      size: 42,
+                      color: Color(0xFF94a3b8),
+                    ),
+                    SizedBox(height: 12),
+                    Text(
+                      "اضغط لالتقاط صورة للمخالفة",
+                      style: TextStyle(color: Color(0xFF94a3b8), fontSize: 14),
+                    ),
+                  ],
+                )
+                : Stack(
+                  children: [
+                    Positioned(
+                      top: 10,
+                      right: 10,
+                      child: CircleAvatar(
+                        backgroundColor: Colors.red.withOpacity(0.8),
+                        child: IconButton(
+                          icon: const Icon(Icons.close, color: Colors.white),
+                          onPressed:
+                              () =>
+                                  context.read<ReportViewModel>().removeImage(),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+      ),
+    );
+  }
+}
