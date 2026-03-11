@@ -18,5 +18,13 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  int _currentIndex = 0;
+  int get currentIndex => _currentIndex;
+
+  void setPage(int index) {
+    _currentIndex = index;
+    notifyListeners();
+  }
+
   // Future logic to fetch reports / data from remote APIs will be added here
 }

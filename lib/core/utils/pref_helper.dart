@@ -4,6 +4,12 @@ class PrefHelper {
   static const String _tokenKey = 'access_token';
   static const String _isLoggedInKey = 'is_logged_in';
   static const String _roleKey = 'user_role';
+  static const String _profileImagePathKey = 'profile_image_path';
+  static const String _notificationsEnabledKey = 'notifications_enabled';
+  static const String _userNameKey = 'user_name';
+  static const String _userPhoneKey = 'user_phone';
+  static const String _userAddressKey = 'user_address';
+  static const String _isDarkModeKey = 'is_dark_mode';
 
   /// حفظ التوكن
   static Future<void> saveToken(String token) async {
@@ -30,8 +36,81 @@ class PrefHelper {
     return prefs.getString(_roleKey);
   }
 
+  /// حفظ مسار صورة الملف الشخصي
+  static Future<void> saveProfileImagePath(String path) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_profileImagePathKey, path);
+  }
+
+  /// جلب مسار صورة الملف الشخصي
+  static Future<String?> getProfileImagePath() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_profileImagePathKey);
+  }
+
+  /// حفظ إعدادات الإشعارات
+  static Future<void> saveNotificationsEnabled(bool enabled) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_notificationsEnabledKey, enabled);
+  }
+
+  /// جلب إعدادات الإشعارات
+  static Future<bool> isNotificationsEnabled() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_notificationsEnabledKey) ?? true;
+  }
+
+  /// حفظ اسم المستخدم
+  static Future<void> saveUserName(String name) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_userNameKey, name);
+  }
+
+  /// جلب اسم المستخدم
+  static Future<String?> getUserName() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_userNameKey);
+  }
+
+  /// حفظ رقم جوال المستخدم
+  static Future<void> saveUserPhone(String phone) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_userPhoneKey, phone);
+  }
+
+  /// جلب رقم جوال المستخدم
+  static Future<String?> getUserPhone() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_userPhoneKey);
+  }
+
+  /// حفظ عنوان المستخدم
+  static Future<void> saveUserAddress(String address) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_userAddressKey, address);
+  }
+
+  /// جلب عنوان المستخدم
+  static Future<String?> getUserAddress() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_userAddressKey);
+  }
+
+  /// حفظ وضع الظهور (داكن / فاتح)
+  static Future<void> saveDarkMode(bool isDark) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_isDarkModeKey, isDark);
+  }
+
+  /// جلب وضع الظهور
+  static Future<bool> isDarkMode() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_isDarkModeKey) ?? false;
+  }
+
   /// التحقق من حالة الدخول
   static Future<bool> isLoggedIn() async {
+
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool(_isLoggedInKey) ?? false;
   }

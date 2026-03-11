@@ -13,6 +13,7 @@ class StatsCards extends StatelessWidget {
           "بلاغات نشطة",
           const Color(0xFFfee2e2),
           const Color(0xFF991b1b),
+          context,
         ),
         const SizedBox(width: 15),
         _statCard(
@@ -20,17 +21,18 @@ class StatsCards extends StatelessWidget {
           "بلاغ تم إنجازه",
           const Color(0xFFe0f2fe),
           const Color(0xFF075985),
+          context,
         ),
       ],
     );
   }
 
-  Widget _statCard(String val, String label, Color bg, Color textColor) {
+  Widget _statCard(String val, String label, Color bg, Color textColor, BuildContext context) {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 20),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
@@ -55,7 +57,10 @@ class StatsCards extends StatelessWidget {
             const SizedBox(height: 5),
             Text(
               label,
-              style: const TextStyle(fontSize: 13, color: Colors.grey),
+              style: TextStyle(
+                fontSize: 13,
+                color: Theme.of(context).textTheme.bodySmall?.color ?? Colors.grey,
+              ),
             ),
           ],
         ),

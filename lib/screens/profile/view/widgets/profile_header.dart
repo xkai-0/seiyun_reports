@@ -11,47 +11,69 @@ class ProfileHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = viewModel.currentUser;
+    final name = viewModel.userName ?? user?.displayName ?? "أحمد محمد العلي";
+    final phone = viewModel.userPhone ?? "+967 766 123 457";
+    final address = viewModel.userAddress ?? "سيئون - حضرموت";
+
     return Stack(
       clipBehavior: Clip.none,
       children: [
         Container(
-          height: 220,
+          height: 240,
           width: double.infinity,
           decoration: const BoxDecoration(
             gradient: AppTheme.headerGradient,
             borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(40),
-              bottomRight: Radius.circular(40),
+              bottomLeft: Radius.circular(50),
+              bottomRight: Radius.circular(50),
             ),
           ),
-          child: const SafeArea(
+          child: SafeArea(
             child: Padding(
-              padding: EdgeInsets.only(top: 20, right: 30),
-              child: Text(
-                "الملف الشخصي",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
+              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "الملف الشخصي",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () => _showEditProfileDialog(context),
+                    icon: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.2),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.edit, color: Colors.white, size: 20),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
         ),
         Positioned(
-          top: 100,
+          top: 110,
           left: 20,
           right: 20,
           child: Container(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: AppTheme.creamColor,
-              borderRadius: BorderRadius.circular(20),
+              color: Theme.of(context).cardColor,
+              borderRadius: BorderRadius.circular(30),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 10,
-                  offset: const Offset(0, 5),
+                  color: AppTheme.primaryColor.withOpacity(0.12),
+                  blurRadius: 25,
+                  offset: const Offset(0, 10),
                 ),
               ],
             ),
@@ -64,31 +86,31 @@ class ProfileHeader extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        user?.displayName ?? "أحمد محمد العلي",
-                        style: const TextStyle(
-                          fontSize: 20,
+                        name,
+                        style: TextStyle(
+                          fontSize: 22,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF333333),
+                          color: Theme.of(context).textTheme.titleLarge?.color,
                         ),
                       ),
-                      const Text(
-                        "مستخدم منذ يناير 2025",
-                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                      const SizedBox(height: 4),
+                      Text(
+                        "عضو فعال",
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: AppTheme.primaryColor.withOpacity(0.8),
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                      const SizedBox(height: 10),
-                      _buildInfoRow(
-                        Icons.email_outlined,
-                        user?.email ?? "ahmad.ali@email.com",
-                      ),
-                      _buildInfoRow(Icons.phone_outlined, "+967 766 123 457"),
-                      _buildInfoRow(
-                        Icons.location_on_outlined,
-                        "شارع الجزائر - جولة الغوير شمالاً",
-                      ),
+                      const SizedBox(height: 12),
+                      _buildInfoRow(context, Icons.email_outlined, user?.email ?? "no-email@example.com"),
+                      const SizedBox(height: 6),
+                      _buildInfoRow(context, Icons.phone_android_outlined, phone),
+                      const SizedBox(height: 6),
+                      _buildInfoRow(context, Icons.location_on_outlined, address),
                     ],
                   ),
                 ),
-                const Icon(Icons.edit_note, color: Colors.grey),
               ],
             ),
           ),
@@ -97,33 +119,96 @@ class ProfileHeader extends StatelessWidget {
     );
   }
 
+  void _showEditProfileDialog(BuildContext context) {
+    final nameController = TextEditingController(text: viewModel.userName ?? viewModel.currentUser?.displayName);
+    final phoneController = TextEditingController(text: viewModel.userPhone);
+    final addressController = TextEditingController(text: viewModel.userAddress);
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("تعديل البيانات", textAlign: TextAlign.center),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: nameController,
+                decoration: const InputDecoration(labelText: "الأسم الكامل"),
+              ),
+              TextField(
+                controller: phoneController,
+                decoration: const InputDecoration(labelText: "رقم الهاتف"),
+                keyboardType: TextInputType.phone,
+              ),
+              TextField(
+                controller: addressController,
+                decoration: const InputDecoration(labelText: "العنوان"),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("إلغاء"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              viewModel.updateUserName(nameController.text);
+              viewModel.updateUserPhone(phoneController.text);
+              viewModel.updateUserAddress(addressController.text);
+              Navigator.pop(context);
+            },
+            child: const Text("حفظ"),
+          ),
+        ],
+      ),
+    );
+  }
+
   void _showPicker(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
-      ),
+      backgroundColor: Colors.transparent,
       builder: (BuildContext bc) {
-        return SafeArea(
-          child: Wrap(
-            children: [
-              ListTile(
-                leading: const Icon(Icons.photo_library),
-                title: const Text('المعرض'),
-                onTap: () {
-                  viewModel.pickImage(ImageSource.gallery);
-                  Navigator.of(context).pop();
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.photo_camera),
-                title: const Text('الكاميرا'),
-                onTap: () {
-                  viewModel.pickImage(ImageSource.camera);
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
+        return Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).cardColor,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          child: SafeArea(
+            child: Wrap(
+              children: [
+                const Center(
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: 15),
+                    child: Text(
+                      "تغيير صورة الملف الشخصي",
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                  ),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.photo_library, color: AppTheme.primaryColor),
+                  title: const Text('المعرض'),
+                  onTap: () {
+                    viewModel.pickImage(ImageSource.gallery);
+                    Navigator.of(context).pop();
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.photo_camera, color: AppTheme.primaryColor),
+                  title: const Text('الكاميرا'),
+                  onTap: () {
+                    viewModel.pickImage(ImageSource.camera);
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -133,38 +218,40 @@ class ProfileHeader extends StatelessWidget {
   Widget _buildAvatar(BuildContext context) {
     return Stack(
       children: [
-        CircleAvatar(
-          radius: 40,
-          backgroundColor: AppTheme.primaryColor.withOpacity(0.2),
-          backgroundImage:
-              viewModel.profileImage != null
-                  ? FileImage(viewModel.profileImage!)
-                  : null,
-          child:
-              viewModel.profileImage == null
-                  ? const Icon(
-                    Icons.person,
-                    size: 40,
-                    color: AppTheme.primaryColor,
-                  )
-                  : null,
+        Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(color: AppTheme.primaryColor.withOpacity(0.1), width: 4),
+          ),
+          child: CircleAvatar(
+            radius: 46,
+            backgroundColor: AppTheme.primaryColor.withOpacity(0.05),
+            backgroundImage: viewModel.profileImage != null ? FileImage(viewModel.profileImage!) : null,
+            child: viewModel.profileImage == null
+                ? const Icon(Icons.person, size: 50, color: AppTheme.primaryColor)
+                : null,
+          ),
         ),
         Positioned(
-          bottom: 0,
-          left: 0,
+          bottom: 4,
+          left: 4,
           child: GestureDetector(
             onTap: () => _showPicker(context),
             child: Container(
-              padding: const EdgeInsets.all(4),
-              decoration: const BoxDecoration(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
                 color: AppTheme.primaryColor,
                 shape: BoxShape.circle,
+                border: Border.all(color: Colors.white, width: 3),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
               ),
-              child: const Icon(
-                Icons.camera_alt,
-                color: Colors.white,
-                size: 16,
-              ),
+              child: const Icon(Icons.camera_alt, color: Colors.white, size: 16),
             ),
           ),
         ),
@@ -172,22 +259,24 @@ class ProfileHeader extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoRow(IconData icon, String text) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2),
-      child: Row(
-        children: [
-          Icon(icon, size: 14, color: Colors.grey),
-          const SizedBox(width: 5),
-          Expanded(
-            child: Text(
-              text,
-              style: const TextStyle(fontSize: 12, color: Color(0xFF555555)),
-              overflow: TextOverflow.ellipsis,
+  Widget _buildInfoRow(BuildContext context, IconData icon, String text) {
+    return Row(
+      children: [
+        Icon(icon, size: 16, color: Theme.of(context).textTheme.bodySmall?.color),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            text,
+            style: TextStyle(
+              fontSize: 14,
+              color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.8),
+              height: 1.2,
             ),
+            overflow: TextOverflow.ellipsis,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
+

@@ -12,16 +12,16 @@ class LocationCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
-        color: const Color(0xFFf1f5f9),
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFFe2e8f0)),
+        border: Border.all(color: Theme.of(context).dividerColor),
       ),
       child: Row(
         children: [
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).scaffoldBackgroundColor,
               borderRadius: BorderRadius.circular(12),
             ),
             child: const Icon(Icons.location_on, color: Colors.red, size: 22),
@@ -33,14 +33,18 @@ class LocationCard extends StatelessWidget {
               children: [
                 Text(
                   reportVM.locationStatus,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
+                    color: Theme.of(context).textTheme.titleSmall?.color,
                   ),
                 ),
-                const Text(
+                Text(
                   "الموقع الحالي للمخالفة",
-                  style: TextStyle(fontSize: 11, color: Color(0xFF64748b)),
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: Theme.of(context).textTheme.bodySmall?.color,
+                  ),
                 ),
               ],
             ),
@@ -55,16 +59,16 @@ class LocationCard extends StatelessWidget {
                 onPressed:
                     () => context.read<ReportViewModel>().getCurrentLocation(),
                 style: TextButton.styleFrom(
-                  backgroundColor: Colors.white,
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                child: const Text(
+                child: Text(
                   "تحديد",
                   style: TextStyle(
                     fontSize: 12,
-                    color: Colors.black,
+                    color: Theme.of(context).primaryColor,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

@@ -9,12 +9,12 @@ class RewardsCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           "المكافآت والانجازات",
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            color: Colors.grey,
+            color: Theme.of(context).textTheme.titleSmall?.color ?? Colors.grey,
           ),
         ),
         const SizedBox(height: 10),

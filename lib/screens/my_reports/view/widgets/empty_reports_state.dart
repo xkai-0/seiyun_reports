@@ -24,34 +24,29 @@ class EmptyReportsState extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-          const Text(
+          Text(
             "لا توجد بلاغات حالياً",
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Colors.black87,
+              color: Theme.of(context).textTheme.titleLarge?.color,
             ),
           ),
           const SizedBox(height: 10),
-          const Text(
-            "لم تقم بإرسال أي بلاغ بعد.\nيمكنك البدء بالمساهمة في نظافة مدينتك الآن.",
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 14, color: Colors.grey, height: 1.5),
-          ),
-          const SizedBox(height: 30),
-          ElevatedButton.icon(
-            onPressed: () {},
-            icon: const Icon(Icons.add),
-            label: const Text("إرسال بلاغ جديد"),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppTheme.accentGreen,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 40),
+            child: Text(
+              "لم تقم بإرسال أي بلاغ بعد.\nيمكنك البدء بالمساهمة في نظافة مدينتك الآن.",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 14,
+                color:
+                    Theme.of(context).textTheme.bodySmall?.color ?? Colors.grey,
+                height: 1.5,
               ),
             ),
           ),
+          const SizedBox(height: 30),
         ],
       ),
     );

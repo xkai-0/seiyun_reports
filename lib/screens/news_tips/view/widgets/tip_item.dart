@@ -12,7 +12,7 @@ class TipItem extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 15),
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(18),
         border: Border.all(color: tip.color.withValues(alpha: 0.1)),
       ),
@@ -34,17 +34,18 @@ class TipItem extends StatelessWidget {
               children: [
                 Text(
                   tip.title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
+                    color: Theme.of(context).textTheme.titleSmall?.color,
                   ),
                 ),
                 const SizedBox(height: 5),
                 Text(
                   tip.desc,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 12,
-                    color: Colors.grey,
+                    color: Theme.of(context).textTheme.bodySmall?.color,
                     height: 1.4,
                   ),
                 ),

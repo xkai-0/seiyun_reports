@@ -7,20 +7,24 @@ class TipsGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        _tipCard("كيف تقدم بلاغاً فعالاً؟", Icons.lightbulb_outline),
+        _tipCard("كيف تقدم بلاغاً فعالاً؟", Icons.lightbulb_outline, context),
         const SizedBox(width: 15),
-        _tipCard("أوقات الاستجابة المتوقعة", Icons.access_time),
+        _tipCard("أوقات الاستجابة المتوقعة", Icons.access_time, context),
       ],
     );
   }
 
-  Widget _tipCard(String title, IconData icon) {
+  Widget _tipCard(String title, IconData icon, BuildContext context) {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.all(15),
         decoration: BoxDecoration(
-          color: const Color(0xFFFFFBEB),
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(15),
+          border: Border.all(
+            color: Colors.orange.withOpacity(0.2),
+            width: 1,
+          ),
         ),
         child: Column(
           children: [
@@ -29,7 +33,11 @@ class TipsGrid extends StatelessWidget {
             Text(
               title,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).textTheme.bodyLarge?.color,
+              ),
             ),
           ],
         ),

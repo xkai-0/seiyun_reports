@@ -39,25 +39,31 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      locale: const Locale('ar', 'YE'),
-      title: 'Seiyun Reports App',
-      theme: AppTheme.lightTheme,
-      home: StreamBuilder<User?>(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Scaffold(
-              body: Center(child: CircularProgressIndicator()),
-            );
-          }
-          if (snapshot.hasData) {
-            return HomeScreen();
-          }
-          return const AuthScreen();
-        },
-      ),
+    return Consumer<ProfileViewModel>(
+      builder: (context, profileViewModel, child) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          locale: const Locale('ar', 'YE'),
+          title: 'Seiyun Reports App',
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          themeMode: profileViewModel.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+          home: StreamBuilder<User?>(
+            stream: FirebaseAuth.instance.authStateChanges(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Scaffold(
+                  body: Center(child: CircularProgressIndicator()),
+                );
+              }
+              if (snapshot.hasData) {
+                return HomeScreen();
+              }
+              return const AuthScreen();
+            },
+          ),
+        );
+      },
     );
   }
 }

@@ -73,10 +73,10 @@ class CategoryGrid extends StatelessWidget {
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).cardColor,
               borderRadius: BorderRadius.circular(22),
               border: Border.all(
-                color: isSelected ? AppTheme.accentGreen : Colors.grey.shade200,
+                color: isSelected ? AppTheme.accentGreen : Theme.of(context).dividerColor.withOpacity(0.1),
                 width: isSelected ? 2.5 : 1,
               ),
               boxShadow: [
@@ -94,7 +94,7 @@ class CategoryGrid extends StatelessWidget {
                   width: 45,
                   height: 45,
                   decoration: BoxDecoration(
-                    color: cat['bg'] as Color,
+                    color: (cat['bg'] as Color).withOpacity(Theme.of(context).brightness == Brightness.dark ? 0.2 : 1.0),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Icon(
@@ -106,9 +106,10 @@ class CategoryGrid extends StatelessWidget {
                 const SizedBox(height: 10),
                 Text(
                   cat['label'] as String,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
+                    color: Theme.of(context).textTheme.titleSmall?.color,
                   ),
                 ),
               ],

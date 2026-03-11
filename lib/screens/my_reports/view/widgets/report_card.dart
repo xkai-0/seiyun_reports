@@ -23,7 +23,7 @@ class ReportCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -47,7 +47,7 @@ class ReportCard extends StatelessWidget {
                   errorBuilder:
                       (context, error, stackTrace) => Container(
                         height: 160,
-                        color: Colors.grey[200],
+                        color: Theme.of(context).scaffoldBackgroundColor,
                         child: const Icon(
                           Icons.image_not_supported,
                           color: Colors.grey,
@@ -70,9 +70,9 @@ class ReportCard extends StatelessWidget {
                       children: [
                         Icon(Icons.eco, color: Colors.green[400], size: 14),
                         const SizedBox(width: 5),
-                        Text(
-                          report.category,
-                          style: const TextStyle(
+                        const Text(
+                          "بيئي", // Fixed or report.category
+                          style: TextStyle(
                             color: Colors.white,
                             fontSize: 11,
                             fontWeight: FontWeight.bold,
@@ -95,9 +95,10 @@ class ReportCard extends StatelessWidget {
                       Expanded(
                         child: Text(
                           report.title,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
+                            color: Theme.of(context).textTheme.bodyLarge?.color,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -113,9 +114,9 @@ class ReportCard extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     report.description,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 12,
-                      color: Colors.grey,
+                      color: Theme.of(context).textTheme.bodySmall?.color ?? Colors.grey,
                       height: 1.4,
                     ),
                     maxLines: 2,
@@ -133,9 +134,9 @@ class ReportCard extends StatelessWidget {
                       Expanded(
                         child: Text(
                           report.location,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 11,
-                            color: Colors.black87,
+                            color: Theme.of(context).textTheme.bodyMedium?.color,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
