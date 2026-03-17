@@ -29,4 +29,15 @@ class UserModel {
       type: json['type'],
     );
   }
+  Map<String, dynamic> toJson() {
+  return {
+    'id': id,
+    'name': name,
+    'email': email,
+    'role': role,
+    'street': street,
+    'district': district,
+    'type': type,
+  };
+}
 }

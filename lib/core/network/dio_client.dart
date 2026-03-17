@@ -7,7 +7,7 @@ class DioClient {
   DioClient() {
     dio = Dio(
       BaseOptions(
-        baseUrl: 'https://medicalhouse-ye.net/api',
+        baseUrl: 'https://medicalhouse-ye.net/api/',
         connectTimeout: const Duration(seconds: 15),
         receiveTimeout: const Duration(seconds: 15),
         headers: {

@@ -100,10 +100,10 @@ class _ReportScreenState extends State<ReportScreen> {
     );
   }
 
-  Widget _buildSubmitButton(BuildContext context) {
-    final reportVM = context.read<ReportViewModel>();
+ Widget _buildSubmitButton(BuildContext context) {
+  final reportVM = context.watch<ReportViewModel>();
 
-    return ElevatedButton(
+  return ElevatedButton(
       onPressed: () {
         debugPrint(
           "Sending: ${reportVM.selectedCategory}, Location: ${reportVM.locationStatus}, Image: ${reportVM.image?.path}, Description: ${_descriptionController.text}",
@@ -114,14 +114,14 @@ class _ReportScreenState extends State<ReportScreen> {
         minimumSize: const Size(double.infinity, 65),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       ),
-      child: const Text(
-        "إرسال البلاغ للصندوق",
-        style: TextStyle(
-          fontSize: 17,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
+   
+    child: const Text(
+          "إرسال البلاغ للصندوق",
+          style: TextStyle(
+            fontSize: 17,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
         ),
-      ),
-    );
-  }
-}
+  );
+}}

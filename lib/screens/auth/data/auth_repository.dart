@@ -1,17 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:seiyun_reports_app/core/network/dio_client.dart';
 import 'package:seiyun_reports_app/core/network/api_service.dart';
-import 'remote/auth_api.dart';
+import 'AuthService.dart';
 import 'package:seiyun_reports_app/core/utils/pref_helper.dart';
-import 'models/user_model.dart';
+import 'user_model.dart';
 
 class AuthRepository {
-  late AuthApi _authApi;
+  late AuthService _authService;
 
   AuthRepository() {
     final dioClient = DioClient();
     final apiService = ApiService(dioClient);
-    _authApi = AuthApi(apiService);
+    _authService = AuthService(apiService);
   }
 
   Future<UserModel> registerUser({
@@ -26,7 +26,7 @@ class AuthRepository {
       throw Exception('Failed to get Firebase ID Token');
     }
 
-    final response = await _authApi.createUser(
+    final response = await _authService.createUser(
       firebaseToken: firebaseToken,
       role: role,
       name: name,
@@ -39,6 +39,7 @@ class AuthRepository {
       // حفظ التوكن والدور محلياً
       await PrefHelper.saveToken(firebaseToken);
       await PrefHelper.saveRole(userModel.role);
+      await PrefHelper.saveUserId(userModel.id);
 
       return userModel;
     } else {

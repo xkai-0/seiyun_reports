@@ -2,10 +2,10 @@ import 'package:dio/dio.dart';
 import 'package:seiyun_reports_app/core/network/api_service.dart';
 
 //هذا الملف هو اللي نكتب فيه الروابط  اللي  في لارفل
-class AuthApi {
+class AuthService {
   final ApiService _apiService;
 
-  AuthApi(this._apiService);
+  AuthService(this._apiService);
 
   Future<Response> createUser({
     required String firebaseToken,
