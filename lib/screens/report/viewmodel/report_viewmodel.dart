@@ -2,8 +2,19 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
+import '../data/report_repository.dart';
+import 'package:seiyun_reports_app/core/network/api_service.dart';
+import 'package:seiyun_reports_app/core/network/dio_client.dart';
+import '../data/report_service.dart';
+import '../data/report_repository.dart';
 
 class ReportViewModel extends ChangeNotifier {
+final ReportRepository _repository = ReportRepository(
+    ReportService(ApiService(DioClient()))
+  );  
+
+
+
   String _selectedCategory = 'نفايات';
   String get selectedCategory => _selectedCategory;
 
@@ -66,6 +77,7 @@ class ReportViewModel extends ChangeNotifier {
         Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high,
         );
+       
         _locationStatus =
             "إحداثيات: ${position.latitude.toStringAsFixed(4)}, ${position.longitude.toStringAsFixed(4)}";
       } else {

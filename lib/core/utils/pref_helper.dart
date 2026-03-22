@@ -4,6 +4,7 @@ class PrefHelper {
   static const String _tokenKey = 'access_token';
   static const String _isLoggedInKey = 'is_logged_in';
   static const String _roleKey = 'user_role';
+  static const String _userIdKey = 'user_id';
   static const String _profileImagePathKey = 'profile_image_path';
   static const String _notificationsEnabledKey = 'notifications_enabled';
   static const String _userNameKey = 'user_name';
@@ -17,12 +18,24 @@ class PrefHelper {
     await prefs.setString(_tokenKey, token);
     await prefs.setBool(_isLoggedInKey, true);
   }
-
-  /// جلب التوكن
+    /// جلب التوكن
   static Future<String?> getToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(_tokenKey);
   }
+  
+  static Future<void> saveUserId(int userId) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_userIdKey, userId);
+  }
+
+  //  دالة لجلب الايدي
+  static Future<int?> getUserId() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(_userIdKey);
+  }
+
+
 
   /// حفظ الدور (مواطن / مشرف)
   static Future<void> saveRole(String role) async {

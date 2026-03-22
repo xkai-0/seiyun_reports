@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:seiyun_reports_app/screens/news_tips/data/models/news_model.dart';
+import 'package:seiyun_reports_app/screens/news_tips/data/models/news_tips_model.dart';
 
 class NewsCard extends StatelessWidget {
   final NewsModel news;
@@ -51,7 +51,7 @@ class NewsCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
-                    news.tag,
+                    news.category,
                     style: const TextStyle(
                       color: Colors.green,
                       fontSize: 11,
@@ -90,7 +90,7 @@ class NewsCard extends StatelessWidget {
                         ),
                         const SizedBox(width: 5),
                         Text(
-                          news.time,
+                          news.publishDate,
                           style: const TextStyle(
                             fontSize: 11,
                             color: Colors.grey,
@@ -101,14 +101,6 @@ class NewsCard extends StatelessWidget {
                           Icons.calendar_today_outlined,
                           size: 14,
                           color: Colors.grey,
-                        ),
-                        const SizedBox(width: 5),
-                        Text(
-                          news.date,
-                          style: const TextStyle(
-                            fontSize: 11,
-                            color: Colors.grey,
-                          ),
                         ),
                       ],
                     ),
@@ -161,4 +153,14 @@ class NewsCard extends StatelessWidget {
       ),
     );
   }
+  // ودجت فرعي يظهر في حالة عدم وجود صورة
+  Widget _buildPlaceholder() {
+    return Container(
+      height: 160,
+      width: double.infinity,
+      color: const Color(0xFFF1F5F9),
+      child: const Icon(Icons.image_outlined, size: 50, color: Colors.grey),
+    );
+  }
 }
+

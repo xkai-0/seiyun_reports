@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:seiyun_reports_app/core/utils/pref_helper.dart';
 import 'package:seiyun_reports_app/screens/auth/view/auth_screen.dart';
 import 'package:seiyun_reports_app/screens/home/view/home_screen.dart';
 import 'package:seiyun_reports_app/screens/auth/viewmodel/auth_viewmodel.dart';
@@ -20,10 +21,15 @@ import 'firebase_options.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
+  String? myToken = await PrefHelper.getToken();
+  print("---------- TOKEN CHECK ----------");
+  print(myToken ?? "لا يوجد توكن مخزن حالياً");
+  print("---------------------------------");
+  // ------------------------------------
   runApp(
     MultiProvider(
       providers: [
+        
         ChangeNotifierProvider(create: (_) => AuthViewModel()),
         ChangeNotifierProvider(create: (_) => HomeViewModel()),
         ChangeNotifierProvider(create: (_) => ReportViewModel()),
@@ -31,6 +37,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => MyReportsViewModel()),
         ChangeNotifierProvider(create: (_) => NewsTipsViewModel()),
         ChangeNotifierProvider(create: (_) => ProfileViewModel()),
+        
         ChangeNotifierProvider(create: (_) => CitizenReportsViewModel()),
         ChangeNotifierProvider(create: (_) => PickupSchedulesViewModel()),
         ChangeNotifierProvider(create: (_) => MapViewModel()),
