@@ -11,7 +11,7 @@ class NewsCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -23,17 +23,18 @@ class NewsCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-            child: news.image != null 
-              ? Image.network(
-                  news.image!, // استخدمنا الـ Getter اللي صنعناه في الموديل
-                  height: 160,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => _buildPlaceholder(),
-                )
-              : _buildPlaceholder(),
+          Container(
+            height: 140,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            child: const Icon(
+              Icons.image_outlined,
+              size: 50,
+              color: Colors.grey,
+            ),
           ),
           Padding(
             padding: const EdgeInsets.all(15),
@@ -61,18 +62,18 @@ class NewsCard extends StatelessWidget {
                 const SizedBox(height: 10),
                 Text(
                   news.title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
+                    color: Theme.of(context).textTheme.titleMedium?.color,
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  news.content,
-                  maxLines: 2,
-                  style: const TextStyle(
+                  news.desc,
+                  style: TextStyle(
                     fontSize: 12,
-                    color: Colors.grey,
+                    color: Theme.of(context).textTheme.bodySmall?.color,
                     height: 1.5,
                   ),
                 ),
@@ -107,11 +108,19 @@ class NewsCard extends StatelessWidget {
                       children: [
                         IconButton(
                           onPressed: () {},
-                          icon: const Icon(Icons.share_outlined, size: 20),
+                          icon: Icon(
+                            Icons.share_outlined,
+                            size: 20,
+                            color: Theme.of(context).iconTheme.color,
+                          ),
                         ),
                         IconButton(
                           onPressed: () {},
-                          icon: const Icon(Icons.bookmark_border, size: 20),
+                          icon: Icon(
+                            Icons.bookmark_border,
+                            size: 20,
+                            color: Theme.of(context).iconTheme.color,
+                          ),
                         ),
                       ],
                     ),
@@ -123,14 +132,15 @@ class NewsCard extends StatelessWidget {
                   child: OutlinedButton(
                     onPressed: () {},
                     style: OutlinedButton.styleFrom(
+                      side: BorderSide(color: Theme.of(context).primaryColor),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: const Text(
+                    child: Text(
                       "اقرأ المزيد",
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Theme.of(context).primaryColor,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

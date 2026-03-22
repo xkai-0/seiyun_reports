@@ -20,6 +20,7 @@ class EnvironmentalStats extends StatelessWidget {
         Row(
           children: [
             _statBox(
+              context,
               "12,500",
               "أطنان تم تدويرها",
               Icons.rebase_edit,
@@ -27,25 +28,26 @@ class EnvironmentalStats extends StatelessWidget {
             ),
             const SizedBox(width: 10),
             _statBox(
+              context,
               "3,200",
               "أشجار تم زراعتها",
               Icons.park_outlined,
               Colors.teal,
             ),
             const SizedBox(width: 10),
-            _statBox("850K", "لتر ماء تم توفيره", Icons.opacity, Colors.blue),
+            _statBox(context, "850K", "لتر ماء تم توفيره", Icons.opacity, Colors.blue),
           ],
         ),
       ],
     );
   }
 
-  Widget _statBox(String val, String label, IconData icon, Color color) {
+  Widget _statBox(BuildContext context, String val, String label, IconData icon, Color color) {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(18),
           boxShadow: [
             BoxShadow(
@@ -70,7 +72,10 @@ class EnvironmentalStats extends StatelessWidget {
             Text(
               label,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 9, color: Colors.grey),
+              style: TextStyle(
+                fontSize: 9,
+                color: Theme.of(context).textTheme.bodySmall?.color,
+              ),
             ),
           ],
         ),

@@ -12,6 +12,9 @@ import 'package:seiyun_reports_app/viewmodels/notification_viewmodel.dart';
 import 'package:seiyun_reports_app/screens/my_reports/viewmodel/my_reports_viewmodel.dart';
 import 'package:seiyun_reports_app/screens/news_tips/viewmodel/news_tips_viewmodel.dart';
 import 'package:seiyun_reports_app/screens/profile/viewmodel/profile_viewmodel.dart';
+import 'package:seiyun_reports_app/screens/citizen_reports/viewmodel/citizen_reports_viewmodel.dart';
+import 'package:seiyun_reports_app/screens/pickup_schedules/viewmodel/pickup_schedules_viewmodel.dart';
+import 'package:seiyun_reports_app/screens/map/viewmodel/map_viewmodel.dart';
 import 'package:seiyun_reports_app/core/theme/app_theme.dart';
 import 'firebase_options.dart';
 
@@ -35,6 +38,9 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => NewsTipsViewModel()),
         ChangeNotifierProvider(create: (_) => ProfileViewModel()),
         
+        ChangeNotifierProvider(create: (_) => CitizenReportsViewModel()),
+        ChangeNotifierProvider(create: (_) => PickupSchedulesViewModel()),
+        ChangeNotifierProvider(create: (_) => MapViewModel()),
       ],
       child: const MyApp(),
     ),
@@ -46,25 +52,31 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      locale: const Locale('ar', 'YE'),
-      title: 'Seiyun Reports App',
-      theme: AppTheme.lightTheme,
-      home: StreamBuilder<User?>(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Scaffold(
-              body: Center(child: CircularProgressIndicator()),
-            );
-          }
-          if (snapshot.hasData) {
-            return HomeScreen();
-          }
-          return const AuthScreen();
-        },
-      ),
+    return Consumer<ProfileViewModel>(
+      builder: (context, profileViewModel, child) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          locale: const Locale('ar', 'YE'),
+          title: 'Seiyun Reports App',
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          themeMode: profileViewModel.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+          home: StreamBuilder<User?>(
+            stream: FirebaseAuth.instance.authStateChanges(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Scaffold(
+                  body: Center(child: CircularProgressIndicator()),
+                );
+              }
+              if (snapshot.hasData) {
+                return HomeScreen();
+              }
+              return const AuthScreen();
+            },
+          ),
+        );
+      },
     );
   }
 }

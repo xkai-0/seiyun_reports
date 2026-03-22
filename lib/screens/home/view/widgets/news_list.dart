@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:seiyun_reports_app/core/theme/app_theme.dart';
 
 class NewsList extends StatelessWidget {
   const NewsList({super.key});
@@ -11,22 +12,24 @@ class NewsList extends StatelessWidget {
           "توسعة خدمات النظافة في الأحياء الجديدة",
           "2023-11-25",
           Icons.cleaning_services,
+          context,
         ),
         _newsItem(
           "تحديث مواعيد جمع النفايات",
           "2023-11-24",
           Icons.event_available,
+          context,
         ),
       ],
     );
   }
 
-  Widget _newsItem(String title, String date, IconData icon) {
+  Widget _newsItem(String title, String date, IconData icon, BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFFF1F5F9),
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(15),
       ),
       child: Row(
@@ -34,10 +37,10 @@ class NewsList extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).scaffoldBackgroundColor,
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Icon(icon, color: Colors.brown, size: 20),
+            child: Icon(icon, color: AppTheme.primaryBrown, size: 20),
           ),
           const SizedBox(width: 15),
           Expanded(
@@ -46,14 +49,18 @@ class NewsList extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
                   ),
                 ),
                 Text(
                   date,
-                  style: const TextStyle(fontSize: 11, color: Colors.grey),
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: Theme.of(context).textTheme.bodySmall?.color ?? Colors.grey,
+                  ),
                 ),
               ],
             ),

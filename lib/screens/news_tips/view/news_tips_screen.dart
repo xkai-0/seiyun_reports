@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:seiyun_reports_app/core/theme/app_theme.dart';
+import 'package:seiyun_reports_app/screens/news_tips/data/models/news_model.dart';
+import 'package:seiyun_reports_app/screens/news_tips/data/models/tip_model.dart';
 import 'package:seiyun_reports_app/screens/news_tips/view/widgets/news_tips_header.dart';
 import 'package:seiyun_reports_app/screens/news_tips/view/widgets/news_section_header.dart';
 import 'package:seiyun_reports_app/screens/news_tips/view/widgets/news_card.dart';
@@ -31,7 +31,7 @@ class _NewsTipsScreenState extends State<NewsTipsScreen> {
   Widget build(BuildContext context) {
     final viewModel = context.watch<NewsTipsViewModel>();
     return Scaffold(
-      backgroundColor: AppTheme.backgroundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Directionality(
         textDirection: TextDirection.rtl,
         child: viewModel.isLoading 

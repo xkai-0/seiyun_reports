@@ -10,7 +10,6 @@ import 'package:seiyun_reports_app/screens/report/view/widgets/points_info.dart'
 
 const sectionTitleStyle = TextStyle(
   fontSize: 16,
-  color: Color(0xFF0f172a),
   fontWeight: FontWeight.bold,
 );
 
@@ -33,7 +32,7 @@ class _ReportScreenState extends State<ReportScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFf8f9fa),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Directionality(
         textDirection: TextDirection.rtl,
         child: SingleChildScrollView(
@@ -46,30 +45,55 @@ class _ReportScreenState extends State<ReportScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text("نوع البلاغ *", style: sectionTitleStyle),
+                    Text(
+                      "نوع البلاغ *",
+                      style: sectionTitleStyle.copyWith(
+                        color: Theme.of(context).textTheme.titleLarge?.color,
+                      ),
+                    ),
                     const SizedBox(height: 15),
                     const CategoryGrid(),
                     const SizedBox(height: 30),
-                    const Text("الأولوية *", style: sectionTitleStyle),
+                    Text(
+                      "الأولوية *",
+                      style: sectionTitleStyle.copyWith(
+                        color: Theme.of(context).textTheme.titleLarge?.color,
+                      ),
+                    ),
                     const SizedBox(height: 15),
                     const PrioritySelector(),
                     const SizedBox(height: 30),
-                    const Text("الموقع *", style: sectionTitleStyle),
+                    Text(
+                      "الموقع *",
+                      style: sectionTitleStyle.copyWith(
+                        color: Theme.of(context).textTheme.titleLarge?.color,
+                      ),
+                    ),
                     const SizedBox(height: 15),
                     const LocationCard(),
                     const SizedBox(height: 30),
-                    const Text("الصورة (اختياري)", style: sectionTitleStyle),
+                    Text(
+                      "الصورة (اختياري)",
+                      style: sectionTitleStyle.copyWith(
+                        color: Theme.of(context).textTheme.titleLarge?.color,
+                      ),
+                    ),
                     const SizedBox(height: 15),
                     const ImagePickerWidget(),
                     const SizedBox(height: 30),
-                    const Text("ملاحظات إضافية", style: sectionTitleStyle),
+                    Text(
+                      "ملاحظات إضافية",
+                      style: sectionTitleStyle.copyWith(
+                        color: Theme.of(context).textTheme.titleLarge?.color,
+                      ),
+                    ),
                     const SizedBox(height: 15),
                     _buildDescriptionField(),
                     const SizedBox(height: 35),
                     const PointsInfo(),
                     const SizedBox(height: 35),
                     _buildSubmitButton(context),
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 100),
                   ],
                 ),
               ),
@@ -84,17 +108,19 @@ class _ReportScreenState extends State<ReportScreen> {
     return TextField(
       controller: _descriptionController,
       maxLines: 4,
+      style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
       decoration: InputDecoration(
         hintText: "صف المشكلة بدقة لمساعدة الفريق الميداني...",
+        hintStyle: TextStyle(color: Theme.of(context).textTheme.bodySmall?.color),
         filled: true,
-        fillColor: Colors.white,
+        fillColor: Theme.of(context).cardColor,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20),
-          borderSide: const BorderSide(color: Color(0xFFe2e8f0)),
+          borderSide: BorderSide(color: Theme.of(context).dividerColor),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20),
-          borderSide: const BorderSide(color: Color(0xFFe2e8f0)),
+          borderSide: BorderSide(color: Theme.of(context).dividerColor),
         ),
       ),
     );

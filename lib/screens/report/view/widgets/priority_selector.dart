@@ -7,27 +7,29 @@ class PrioritySelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Row(
       children: [
         _priorityItem(
           context,
           "منخفضة",
-          const Color(0xFFdcfce7),
-          const Color(0xFF166534),
+          isDark ? const Color(0xFF064e3b) : const Color(0xFFdcfce7),
+          isDark ? const Color(0xFF34d399) : const Color(0xFF166534),
         ),
         const SizedBox(width: 10),
         _priorityItem(
           context,
           "متوسطة",
-          const Color(0xFFfef9c3),
-          const Color(0xFF854d0e),
+          isDark ? const Color(0xFF78350f) : const Color(0xFFfef9c3),
+          isDark ? const Color(0xFFfbbf24) : const Color(0xFF854d0e),
         ),
         const SizedBox(width: 10),
         _priorityItem(
           context,
           "مرتفعة",
-          const Color(0xFFfee2e2),
-          const Color(0xFF991b1b),
+          isDark ? const Color(0xFF7f1d1d) : const Color(0xFFfee2e2),
+          isDark ? const Color(0xFFf87171) : const Color(0xFF991b1b),
         ),
       ],
     );

@@ -19,15 +19,15 @@ class RecentReportsList extends StatelessWidget {
         "status": "قيد المعالجة",
       },
     ];
-    return Column(children: reports.map((r) => _reportItem(r)).toList());
+    return Column(children: reports.map((r) => _reportItem(r, context)).toList());
   }
 
-  Widget _reportItem(Map<String, String> data) {
+  Widget _reportItem(Map<String, String> data, BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(15),
       ),
       child: Column(
@@ -37,9 +37,10 @@ class RecentReportsList extends StatelessWidget {
             children: [
               Text(
                 data['title']!,
-                style: const TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 14,
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
                 ),
               ),
               Container(
@@ -48,7 +49,7 @@ class RecentReportsList extends StatelessWidget {
                   vertical: 4,
                 ),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF1F5F9),
+                  color: Theme.of(context).colorScheme.surfaceContainerHighest,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(

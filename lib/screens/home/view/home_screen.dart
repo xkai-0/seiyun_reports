@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:seiyun_reports_app/core/theme/app_theme.dart';
+import 'package:provider/provider.dart';
+import 'package:seiyun_reports_app/screens/home/viewmodel/home_viewmodel.dart';
 import 'package:seiyun_reports_app/screens/report/view/report_screen.dart';
 import 'package:seiyun_reports_app/screens/home/view/widgets/home_header.dart';
 import 'package:seiyun_reports_app/screens/home/view/widgets/stats_cards.dart';
@@ -16,7 +18,6 @@ import 'package:seiyun_reports_app/screens/profile/view/profile_screen.dart';
 
 const sectionTitleStyle = TextStyle(
   fontSize: 16,
-  color: Color(0xFF0f172a),
   fontWeight: FontWeight.bold,
 );
 
@@ -28,7 +29,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _currentIndex = 0;
 
   final List<Widget> _pages = [
     const _HomeContent(),
@@ -39,9 +39,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final homeVM = context.watch<HomeViewModel>();
+    
     return Scaffold(
-      backgroundColor: AppTheme.backgroundColor,
-      body: _pages[_currentIndex],
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      extendBody: true,
+      body: _pages[homeVM.currentIndex],
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
@@ -55,11 +58,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: _currentIndex,
+        currentIndex: homeVM.currentIndex,
         onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
+          homeVM.setPage(index);
         },
       ),
     );
@@ -71,7 +72,7 @@ class _HomeContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Directionality(
+    return Directionality(
       textDirection: TextDirection.rtl,
       child: SingleChildScrollView(
         child: Column(
@@ -99,7 +100,12 @@ class _HomeContent extends StatelessWidget {
                   SizedBox(height: 15),
                   NewsList(),
                   SizedBox(height: 25),
-                  Text("نصائح مفيدة", style: sectionTitleStyle),
+                  Text(
+                    "نصائح مفيدة",
+                    style: sectionTitleStyle.copyWith(
+                      color: Theme.of(context).textTheme.titleLarge?.color,
+                    ),
+                  ),
                   SizedBox(height: 15),
                   TipsGrid(),
                   SizedBox(height: 100), // مساحة للزر العائم
