@@ -11,8 +11,8 @@ class ProfileHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = viewModel.currentUser;
-    final name = viewModel.userName ?? user?.displayName ?? "أحمد محمد العلي";
-    final phone = viewModel.userPhone ?? "+967 766 123 457";
+    final name = viewModel.userName ?? user?.displayName ?? "مستخدم";
+    final phone = viewModel.userPhone ?? "+967 777 777 777";
     final address = viewModel.userAddress ?? "سيئون - حضرموت";
 
     return Stack(
@@ -52,7 +52,11 @@ class ProfileHeader extends StatelessWidget {
                         color: Colors.white.withOpacity(0.2),
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(Icons.edit, color: Colors.white, size: 20),
+                      child: const Icon(
+                        Icons.edit,
+                        color: Colors.white,
+                        size: 20,
+                      ),
                     ),
                   ),
                 ],
@@ -103,11 +107,23 @@ class ProfileHeader extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 12),
-                      _buildInfoRow(context, Icons.email_outlined, user?.email ?? "no-email@example.com"),
+                      _buildInfoRow(
+                        context,
+                        Icons.email_outlined,
+                        user?.email ?? "no-email@example.com",
+                      ),
                       const SizedBox(height: 6),
-                      _buildInfoRow(context, Icons.phone_android_outlined, phone),
+                      _buildInfoRow(
+                        context,
+                        Icons.phone_android_outlined,
+                        phone,
+                      ),
                       const SizedBox(height: 6),
-                      _buildInfoRow(context, Icons.location_on_outlined, address),
+                      _buildInfoRow(
+                        context,
+                        Icons.location_on_outlined,
+                        address,
+                      ),
                     ],
                   ),
                 ),
@@ -120,51 +136,60 @@ class ProfileHeader extends StatelessWidget {
   }
 
   void _showEditProfileDialog(BuildContext context) {
-    final nameController = TextEditingController(text: viewModel.userName ?? viewModel.currentUser?.displayName);
+    final nameController = TextEditingController(
+      text: viewModel.userName ?? viewModel.currentUser?.displayName,
+    );
     final phoneController = TextEditingController(text: viewModel.userPhone);
-    final addressController = TextEditingController(text: viewModel.userAddress);
+    final addressController = TextEditingController(
+      text: viewModel.userAddress,
+    );
 
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text("تعديل البيانات", textAlign: TextAlign.center),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: nameController,
-                decoration: const InputDecoration(labelText: "الأسم الكامل"),
+      builder:
+          (context) => AlertDialog(
+            title: const Text("تعديل البيانات", textAlign: TextAlign.center),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    controller: nameController,
+                    decoration: const InputDecoration(
+                      labelText: "الأسم الكامل",
+                    ),
+                  ),
+                  TextField(
+                    controller: phoneController,
+                    decoration: const InputDecoration(labelText: "رقم الهاتف"),
+                    keyboardType: TextInputType.phone,
+                  ),
+                  TextField(
+                    controller: addressController,
+                    decoration: const InputDecoration(labelText: "العنوان"),
+                  ),
+                ],
               ),
-              TextField(
-                controller: phoneController,
-                decoration: const InputDecoration(labelText: "رقم الهاتف"),
-                keyboardType: TextInputType.phone,
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text("إلغاء"),
               ),
-              TextField(
-                controller: addressController,
-                decoration: const InputDecoration(labelText: "العنوان"),
+              ElevatedButton(
+                onPressed: () {
+                  viewModel.updateUserName(nameController.text);
+                  viewModel.updateUserPhone(phoneController.text);
+                  viewModel.updateUserAddress(addressController.text);
+                  Navigator.pop(context);
+                },
+                child: const Text("حفظ"),
               ),
             ],
           ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text("إلغاء"),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              viewModel.updateUserName(nameController.text);
-              viewModel.updateUserPhone(phoneController.text);
-              viewModel.updateUserAddress(addressController.text);
-              Navigator.pop(context);
-            },
-            child: const Text("حفظ"),
-          ),
-        ],
-      ),
     );
   }
 
@@ -187,12 +212,18 @@ class ProfileHeader extends StatelessWidget {
                     padding: EdgeInsets.only(bottom: 15),
                     child: Text(
                       "تغيير صورة الملف الشخصي",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
                   ),
                 ),
                 ListTile(
-                  leading: const Icon(Icons.photo_library, color: AppTheme.primaryColor),
+                  leading: const Icon(
+                    Icons.photo_library,
+                    color: AppTheme.primaryColor,
+                  ),
                   title: const Text('المعرض'),
                   onTap: () {
                     viewModel.pickImage(ImageSource.gallery);
@@ -200,7 +231,10 @@ class ProfileHeader extends StatelessWidget {
                   },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.photo_camera, color: AppTheme.primaryColor),
+                  leading: const Icon(
+                    Icons.photo_camera,
+                    color: AppTheme.primaryColor,
+                  ),
                   title: const Text('الكاميرا'),
                   onTap: () {
                     viewModel.pickImage(ImageSource.camera);
@@ -221,15 +255,26 @@ class ProfileHeader extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            border: Border.all(color: AppTheme.primaryColor.withOpacity(0.1), width: 4),
+            border: Border.all(
+              color: AppTheme.primaryColor.withOpacity(0.1),
+              width: 4,
+            ),
           ),
           child: CircleAvatar(
             radius: 46,
             backgroundColor: AppTheme.primaryColor.withOpacity(0.05),
-            backgroundImage: viewModel.profileImage != null ? FileImage(viewModel.profileImage!) : null,
-            child: viewModel.profileImage == null
-                ? const Icon(Icons.person, size: 50, color: AppTheme.primaryColor)
-                : null,
+            backgroundImage:
+                viewModel.profileImage != null
+                    ? FileImage(viewModel.profileImage!)
+                    : null,
+            child:
+                viewModel.profileImage == null
+                    ? const Icon(
+                      Icons.person,
+                      size: 50,
+                      color: AppTheme.primaryColor,
+                    )
+                    : null,
           ),
         ),
         Positioned(
@@ -242,7 +287,10 @@ class ProfileHeader extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppTheme.primaryColor,
                 shape: BoxShape.circle,
-                border: Border.all(color: Colors.white, width: 3),
+                border: Border.all(
+                  color: Theme.of(context).cardColor,
+                  width: 3,
+                ),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.1),
@@ -251,7 +299,11 @@ class ProfileHeader extends StatelessWidget {
                   ),
                 ],
               ),
-              child: const Icon(Icons.camera_alt, color: Colors.white, size: 16),
+              child: const Icon(
+                Icons.camera_alt,
+                color: Colors.white,
+                size: 16,
+              ),
             ),
           ),
         ),
@@ -262,14 +314,20 @@ class ProfileHeader extends StatelessWidget {
   Widget _buildInfoRow(BuildContext context, IconData icon, String text) {
     return Row(
       children: [
-        Icon(icon, size: 16, color: Theme.of(context).textTheme.bodySmall?.color),
+        Icon(
+          icon,
+          size: 16,
+          color: Theme.of(context).textTheme.bodySmall?.color,
+        ),
         const SizedBox(width: 8),
         Expanded(
           child: Text(
             text,
             style: TextStyle(
               fontSize: 14,
-              color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.8),
+              color: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.color?.withOpacity(0.8),
               height: 1.2,
             ),
             overflow: TextOverflow.ellipsis,
@@ -279,4 +337,3 @@ class ProfileHeader extends StatelessWidget {
     );
   }
 }
-

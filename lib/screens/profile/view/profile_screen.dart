@@ -22,7 +22,7 @@ class ProfileScreen extends StatelessWidget {
           padding: EdgeInsets.zero,
           children: [
             ProfileHeader(viewModel: viewModel),
-            const SizedBox(height: 120), // لتعويض تداخل الـ Positioned في الـ Header
+            const SizedBox(height: 80),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
@@ -76,23 +76,7 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 30),
                   LogoutButton(viewModel: viewModel),
-                  const SizedBox(height: 40),
-                  const Center(
-                    child: Column(
-                      children: [
-                        Text(
-                          "صُنع بكل حب في حضرموت ❤️",
-                          style: TextStyle(color: Colors.grey, fontSize: 10),
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                          "نسخة التطبيق 1.2.0",
-                          style: TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 60),
+                  const SizedBox(height: 100),
                 ],
               ),
             ),
@@ -111,10 +95,10 @@ class _SectionTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title,
-      style: const TextStyle(
+      style: TextStyle(
         fontSize: 17,
         fontWeight: FontWeight.bold,
-        color: Color(0xFF2D3436),
+        color: Theme.of(context).textTheme.titleMedium?.color,
       ),
     );
   }

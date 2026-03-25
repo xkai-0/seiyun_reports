@@ -10,35 +10,53 @@ class ScheduleTimelineItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // تحديد ما إذا كان النظام في الوضع الليلي
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isHighlight = schedule.isToday || schedule.isTomorrow;
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
+        // استخدام لون خلفية يتناسب مع الوضع الليلي والعادي
         color:
-            schedule.isToday || schedule.isTomorrow
-                ? const Color(0xFFF1F8E9)
-                : Colors.grey[50],
+            isHighlight
+                ? (isDark
+                    ? AppTheme.primaryGreen.withOpacity(0.15)
+                    : const Color(0xFFF1F8E9))
+                : Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
           color:
-              schedule.isToday || schedule.isTomorrow
-                  ? AppTheme.primaryGreen.withOpacity(0.3)
-                  : Colors.grey[200]!,
+              isHighlight
+                  ? AppTheme.primaryGreen.withOpacity(0.5)
+                  : Theme.of(context).dividerColor.withOpacity(0.1),
           width: 1.5,
         ),
+        // إضافة ظل خفيف في الوضع الفاتح ليعطي عمق
+        boxShadow:
+            isDark
+                ? []
+                : [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.03),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildDayInfo(),
+          _buildDayInfo(context, isDark),
           const SizedBox(width: 20),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildTimeInfo(),
+                _buildTimeInfo(context),
                 const SizedBox(height: 12),
-                _buildLocationsInfo(),
+                _buildLocationsInfo(context, isDark),
               ],
             ),
           ),
@@ -47,12 +65,12 @@ class ScheduleTimelineItem extends StatelessWidget {
     );
   }
 
-  Widget _buildDayInfo() {
+  Widget _buildDayInfo(BuildContext context, bool isDark) {
     return Column(
       children: [
         if (schedule.isToday || schedule.isTomorrow)
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             margin: const EdgeInsets.only(bottom: 8),
             decoration: BoxDecoration(
               color: AppTheme.primaryGreen,
@@ -70,17 +88,20 @@ class ScheduleTimelineItem extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: isDark ? Colors.black26 : Colors.white,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.grey[200]!),
+            border: Border.all(
+              color: Theme.of(context).dividerColor.withOpacity(0.2),
+            ),
           ),
           child: Column(
             children: [
               Text(
                 schedule.day,
-                style: const TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 14,
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
                 ),
               ),
               Text(
@@ -98,24 +119,25 @@ class ScheduleTimelineItem extends StatelessWidget {
     );
   }
 
-  Widget _buildTimeInfo() {
+  Widget _buildTimeInfo(BuildContext context) {
     return Row(
       children: [
         const Icon(Icons.access_time_filled, size: 18, color: Colors.orange),
         const SizedBox(width: 8),
         Text(
           '${schedule.startTime} - ${schedule.endTime}',
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            letterSpacing: 1.1,
+            color: Theme.of(context).textTheme.titleMedium?.color,
+            letterSpacing: 0.5,
           ),
         ),
       ],
     );
   }
 
-  Widget _buildLocationsInfo() {
+  Widget _buildLocationsInfo(BuildContext context, bool isDark) {
     return Wrap(
       spacing: 8,
       runSpacing: 8,
@@ -125,25 +147,28 @@ class ScheduleTimelineItem extends StatelessWidget {
                 (loc) => Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 10,
-                    vertical: 4,
+                    vertical: 6,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: isDark ? Colors.white10 : Colors.grey[100],
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.grey[200]!),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.location_on,
-                        size: 12,
-                        color: Colors.grey,
+                        size: 14,
+                        color: isDark ? Colors.grey[400] : Colors.grey[600],
                       ),
                       const SizedBox(width: 4),
                       Text(
                         loc,
-                        style: TextStyle(color: Colors.grey[700], fontSize: 13),
+                        style: TextStyle(
+                          color: isDark ? Colors.grey[300] : Colors.grey[800],
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ],
                   ),

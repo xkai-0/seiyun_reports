@@ -50,7 +50,7 @@ class HomeHeader extends StatelessWidget {
                     ],
                   ),
                   Text(
-                    user?.email ?? "حي القرن، سيئون",
+                    homeVM.currentArea,
                     style: const TextStyle(color: Colors.white70, fontSize: 13),
                   ),
                 ],

@@ -70,7 +70,7 @@ class NewsCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  news.desc,
+                  news.content,
                   style: TextStyle(
                     fontSize: 12,
                     color: Theme.of(context).textTheme.bodySmall?.color,

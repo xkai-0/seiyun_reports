@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:seiyun_reports_app/core/theme/app_theme.dart';
+import 'package:seiyun_reports_app/screens/auth/view/auth_screen.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
@@ -87,8 +88,10 @@ class _WelcomePageState extends State<WelcomePage> {
                 ElevatedButton(
                   onPressed: () {
                     if (_currentPage == 2) {
-                      // الانتقال لصفحة التسجيل (SignupScreen)
-                      debugPrint("الانتقال لصفحة التسجيل");
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (_) => const AuthScreen()),
+                      );
                     } else {
                       _pageController.nextPage(
                         duration: const Duration(milliseconds: 500),
@@ -176,7 +179,7 @@ class OnboardingContent extends StatelessWidget {
           Text(
             description,
             textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 16, color: Colors.grey),
+            style: const TextStyle(fontSize: 16, color: Colors.black87),
           ),
         ],
       ),

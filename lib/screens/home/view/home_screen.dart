@@ -16,10 +16,7 @@ import 'package:seiyun_reports_app/screens/map/view/map_screen.dart';
 import 'package:seiyun_reports_app/screens/my_reports/view/my_reports_page.dart';
 import 'package:seiyun_reports_app/screens/profile/view/profile_screen.dart';
 
-const sectionTitleStyle = TextStyle(
-  fontSize: 16,
-  fontWeight: FontWeight.bold,
-);
+const sectionTitleStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -29,7 +26,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   final List<Widget> _pages = [
     const _HomeContent(),
     const MapScreen(),
@@ -40,12 +36,13 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final homeVM = context.watch<HomeViewModel>();
-    
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       extendBody: true,
       body: _pages[homeVM.currentIndex],
       floatingActionButton: FloatingActionButton(
+        heroTag: 'fab',
         onPressed: () {
           Navigator.push(
             context,

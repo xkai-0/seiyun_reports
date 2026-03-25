@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class PickupTipsCard extends StatelessWidget {
-  const PickupTipsCard({Key? key}) : super(key: key);
+  const PickupTipsCard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,11 @@ class PickupTipsCard extends StatelessWidget {
                   color: const Color(0xFFFBC02D),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: const Icon(Icons.tips_and_updates, color: Colors.white, size: 20),
+                child: const Icon(
+                  Icons.tips_and_updates,
+                  color: Colors.white,
+                  size: 20,
+                ),
               ),
               const SizedBox(width: 12),
               const Text(
@@ -38,9 +42,15 @@ class PickupTipsCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          _buildTipRow('يرجى وضع أكياس النفايات في الحاوية قبل موعد الرفع بنصف ساعة.'),
-          _buildTipRow('تأكد من إغلاق أكياس النفايات جيداً لمنع تسرب الروائح أو النفايات.'),
-          _buildTipRow('ساهم معنا في نظافة مدينتك عبر الالتزام بالمواعيد المحددة.'),
+          _buildTipRow(
+            'يرجى وضع أكياس النفايات في الحاوية قبل موعد الرفع بنصف ساعة.',
+          ),
+          _buildTipRow(
+            'تأكد من إغلاق أكياس النفايات جيداً لمنع تسرب الروائح أو النفايات.',
+          ),
+          _buildTipRow(
+            'ساهم معنا في نظافة مدينتك عبر الالتزام بالمواعيد المحددة.',
+          ),
         ],
       ),
     );

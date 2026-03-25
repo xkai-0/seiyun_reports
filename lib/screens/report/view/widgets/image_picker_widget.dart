@@ -51,9 +51,9 @@ class ImagePickerWidget extends StatelessWidget {
         width: double.infinity,
         height: 200, // زيادة الطول قليلاً لعرض الصورة بشكل أوضح
         decoration: BoxDecoration(
-          color: const Color(0xFFf8fafc),
+          color: Theme.of(context).brightness == Brightness.dark ? const Color(0xFF1E293B) : const Color(0xFFf8fafc),
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: const Color(0xFFcbd5e1), width: 2),
+          border: Border.all(color: Theme.of(context).brightness == Brightness.dark ? const Color(0xFF334155) : const Color(0xFFcbd5e1), width: 2),
           image:
               reportVM.image != null
                   ? DecorationImage(

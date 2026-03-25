@@ -49,6 +49,12 @@ class _AuthFormState extends State<AuthForm> {
       return false;
     }
 
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    if (!emailRegex.hasMatch(_emailController.text.trim())) {
+      _showErrorSnackBar("يرجى إدخال بريد إلكتروني صحيح");
+      return false;
+    }
+
     if (authVM.isSignupMode && _nameController.text.trim().isEmpty) {
       _showErrorSnackBar("يرجى إدخال الاسم الكامل");
       return false;

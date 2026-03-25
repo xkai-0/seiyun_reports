@@ -42,7 +42,7 @@ class TipItem extends StatelessWidget {
                 ),
                 const SizedBox(height: 5),
                 Text(
-                  tip.desc,
+                  tip.content,
                   style: TextStyle(
                     fontSize: 12,
                     color: Theme.of(context).textTheme.bodySmall?.color,

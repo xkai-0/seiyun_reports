@@ -5,10 +5,10 @@ class PickupSummaryStats extends StatelessWidget {
   final String nextPickupDay;
 
   const PickupSummaryStats({
-    Key? key,
+    super.key,
     required this.nearbyCount,
     required this.nextPickupDay,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:seiyun_reports_app/screens/news_tips/data/models/news_model.dart';
-import 'package:seiyun_reports_app/screens/news_tips/data/models/tip_model.dart';
+import 'package:provider/provider.dart';
 import 'package:seiyun_reports_app/screens/news_tips/view/widgets/news_tips_header.dart';
 import 'package:seiyun_reports_app/screens/news_tips/view/widgets/news_section_header.dart';
 import 'package:seiyun_reports_app/screens/news_tips/view/widgets/news_card.dart';
@@ -18,13 +17,12 @@ class NewsTipsScreen extends StatefulWidget {
 class _NewsTipsScreenState extends State<NewsTipsScreen> {
   bool isNewsSelected = true;
 
-
   @override
   void initState() {
     super.initState();
-   WidgetsBinding.instance.addPostFrameCallback((_){
-    context.read<NewsTipsViewModel>().fetchDataFromLaravel();
-   });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<NewsTipsViewModel>().fetchDataFromLaravel();
+    });
   }
 
   @override
@@ -34,45 +32,57 @@ class _NewsTipsScreenState extends State<NewsTipsScreen> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Directionality(
         textDirection: TextDirection.rtl,
-        child: viewModel.isLoading 
-          ? const Center(child: CircularProgressIndicator()) // عرض تحميل أثناء جلب البيانات
-          : RefreshIndicator(
-              onRefresh: () => viewModel.fetchDataFromLaravel(),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              NewsTipsHeader(
-                isNewsSelected: viewModel.isNewsSelected,
-                onToggle: (val) => viewModel.toggleSelection(val),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                 if (viewModel.isNewsSelected) ...[
-                            const NewsSectionHeader(title: "أهم الأخبار"),
-                            // ربط قائمة الأخبار الحقيقية من السيرفر
-                            ...viewModel.newsList.map((news) => NewsCard(news: news)),
-                            if (viewModel.newsList.isEmpty) 
-                              const Center(child: Text("لا توجد أخبار حالياً")),
-                          ] else ...[
-                            const NewsSectionHeader(title: "نصائح بيئية"),
-                            // ربط قائمة النصائح الحقيقية من السيرفر
-                            ...viewModel.tipssList.map((tip) => TipItem(tip: tip)),
-                            if (viewModel.tipssList.isEmpty)
-                              const Center(child: Text("لا توجد نصائح حالياً")),
-                          ],
-                    const SizedBox(height: 25),
-                    const CallToActionCard(),
-                    const SizedBox(height: 40),
-                  ],
+        child:
+            viewModel.isLoading
+                ? const Center(
+                  child: CircularProgressIndicator(),
+                ) // عرض تحميل أثناء جلب البيانات
+                : RefreshIndicator(
+                  onRefresh: () => viewModel.fetchDataFromLaravel(),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        NewsTipsHeader(
+                          isNewsSelected: viewModel.isNewsSelected,
+                          onToggle: (val) => viewModel.toggleSelection(val),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (viewModel.isNewsSelected) ...[
+                                const NewsSectionHeader(title: "أهم الأخبار"),
+                                // ربط قائمة الأخبار الحقيقية من السيرفر
+                                ...viewModel.newsList.map(
+                                  (news) => NewsCard(news: news),
+                                ),
+                                if (viewModel.newsList.isEmpty)
+                                  const Center(
+                                    child: Text("لا توجد أخبار حالياً"),
+                                  ),
+                              ] else ...[
+                                const NewsSectionHeader(title: "نصائح بيئية"),
+                                // ربط قائمة النصائح الحقيقية من السيرفر
+                                ...viewModel.tipssList.map(
+                                  (tip) => TipItem(tip: tip),
+                                ),
+                                if (viewModel.tipssList.isEmpty)
+                                  const Center(
+                                    child: Text("لا توجد نصائح حالياً"),
+                                  ),
+                              ],
+                              const SizedBox(height: 25),
+                              const CallToActionCard(),
+                              const SizedBox(height: 40),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ),
       ),
-    ));
+    );
   }
 }
