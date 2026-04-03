@@ -53,7 +53,6 @@ class _NewsTipsScreenState extends State<NewsTipsScreen> {
                             children: [
                               if (viewModel.isNewsSelected) ...[
                                 const NewsSectionHeader(title: "أهم الأخبار"),
-                                // ربط قائمة الأخبار الحقيقية من السيرفر
                                 ...viewModel.newsList.map(
                                   (news) => NewsCard(news: news),
                                 ),

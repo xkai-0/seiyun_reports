@@ -23,6 +23,10 @@ class PrefHelper {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(_tokenKey);
   }
+  static Future<void> saveLoginStatus(bool status) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_isLoggedInKey, status);
+  }
   
   static Future<void> saveUserId(int userId) async {
     final prefs = await SharedPreferences.getInstance();

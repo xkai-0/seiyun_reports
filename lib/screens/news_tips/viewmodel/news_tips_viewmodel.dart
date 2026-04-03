@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:seiyun_reports_app/screens/news_tips/data/models/news_tips_model.dart';
+import 'package:seiyun_reports_app/screens/news_tips/data/news_tips_model.dart';
 import '../data/NewsRepository.dart';
 
 class NewsTipsViewModel extends ChangeNotifier {
   final Newsrepository _newsrepository = Newsrepository();
+  NewsTipsViewModel() {
+    fetchDataFromLaravel();
+  }
   bool _isLoading = false;
   bool get isLoading => _isLoading;
   bool _isNewsSelected = true;

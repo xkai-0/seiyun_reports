@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:seiyun_reports_app/screens/news_tips/data/models/news_tips_model.dart';
+import 'package:seiyun_reports_app/screens/news_tips/data/news_tips_model.dart';
 
 class NewsCard extends StatelessWidget {
   final NewsModel news;
@@ -30,12 +30,23 @@ class NewsCard extends StatelessWidget {
               color: Theme.of(context).scaffoldBackgroundColor,
               borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
             ),
-            child: const Icon(
-              Icons.image_outlined,
-              size: 50,
-              color: Colors.grey,
-            ),
-          ),
+            child: Image.network(
+                news.image ?? "", 
+                fit: BoxFit.cover,
+            
+            loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Center(
+                    child: CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes!
+                          : null,
+                    ),
+                  );
+                },
+                errorBuilder: (context, error, stackTrace) => _buildPlaceholder(),
+              ),),
           Padding(
             padding: const EdgeInsets.all(15),
             child: Column(

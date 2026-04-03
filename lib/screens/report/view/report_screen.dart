@@ -31,6 +31,7 @@ class _ReportScreenState extends State<ReportScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Directionality(
@@ -126,22 +127,42 @@ class _ReportScreenState extends State<ReportScreen> {
     );
   }
 
+
  Widget _buildSubmitButton(BuildContext context) {
   final reportVM = context.watch<ReportViewModel>();
 
   return ElevatedButton(
-      onPressed: () {
-        debugPrint(
-          "Sending: ${reportVM.selectedCategory}, Location: ${reportVM.locationStatus}, Image: ${reportVM.image?.path}, Description: ${_descriptionController.text}",
-        );
-      },
+    // في حال ضغط الزر يصير تحميل عشان مايضغط اكثر من مره ويعلق
+     onPressed: reportVM.isUploading 
+        ? null 
+        : () {
+          // الدالة المسؤولة عن ارسال البلاغات للسيرفر 
+            reportVM.sendNewReport(
+              context, 
+              "بلاغ جديد ", //هنا عدلي واضيفي textField  عشان يدخل العنوان 
+              _descriptionController.text,
+            //  هنا ارسلنا البيانات النصية كبرامتر بينما بقية البيانات زي الموقع والصورة والنوع هي مخزنة مسبقا داخل الفيو مودل كحالة 
+
+            );
+          },
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color(0xFF27ae60),
+        disabledBackgroundColor: const Color(0xFF27ae60).withOpacity(0.6), // لون باهت عند التحميل
         minimumSize: const Size(double.infinity, 65),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       ),
+      //اظهار علامة تحميل 
+      child: reportVM.isUploading
+        ? const SizedBox(
+            width: 25,
+            height: 25,
+            child: CircularProgressIndicator(
+              color: Colors.white,
+              strokeWidth: 2,
+            ),
+          )
    
-    child: const Text(
+           : const Text(
           "إرسال البلاغ للصندوق",
           style: TextStyle(
             fontSize: 17,

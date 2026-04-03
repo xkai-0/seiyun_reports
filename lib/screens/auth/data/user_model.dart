@@ -3,10 +3,9 @@ class UserModel {
   final String name;
   final String email;
   final String role;
-  // هذي بيانات المشرف والمواطن تضاف لاحقا
   final String? street;
   final String? district;
-  final String? type; // للمشرف
+  final String? type; 
 
   UserModel({
     required this.id, 

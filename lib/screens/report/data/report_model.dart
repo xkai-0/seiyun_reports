@@ -1,4 +1,5 @@
 class ReportModel {
+ // تعريف الحقول الي بتجي من قواعد البيانات 
   final int id;
   final int citizenId;
   final String title;
@@ -24,20 +25,19 @@ class ReportModel {
     required this.lng,
     required this.createdAt,
   });
-
+  // تحويل من جيسون الى كائن 
   factory ReportModel.fromJson(Map<String, dynamic> json) {
-    String imageName = json['image'] ?? "";
-    String imageUrl = imageName.isNotEmpty 
-      ? "https://medicalhouse-ye.net/uploads/EnvironmentalTip/main/$imageName"
-      : "https://via.placeholder.com/150";
-
+   
     return ReportModel(
+     // نحط قيم افتراضية تجنب للاخطاء 
       id: json['id'] ?? 0,
       citizenId: json['citizen_id'] ?? 0,
       title: json['title'] ?? 'بلاغ بدون عنوان',
       areaId: json['area_id'],
       description: json['description'] ?? '',
-      image: imageUrl, 
+      image: json['image'] != null && json['image'].toString().isNotEmpty 
+           ? json['image'].toString() 
+           : "https://via.placeholder.com/150",
       status: json['status'] ?? 'قيد الانتظار',
       reportType: json['report_type'] ?? 'رفع',
       lat: json['lat']?.toString() ?? '0.0',
@@ -45,4 +45,16 @@ class ReportModel {
       createdAt: json['created_at'] ?? '',
     );
   }
+  // تحويل الكائن الى جيسون نحتاجه عند الارسال الى قاعدة البيانات 
+  Map<String, dynamic> toJson() {
+  return {
+    'title': title,
+    'description': description,
+    'report_type': reportType,
+    'lat': lat,
+    'lng': lng,
+    'image': image, 
+    'area_id': areaId,
+  };
+}
 }

@@ -6,7 +6,7 @@ class ApiService {
 
   ApiService(DioClient dioClient) : _dio = dioClient.dio;
 
-  // 1. جلب البيانات 
+  //  جلب البيانات 
   Future<Response> get(String path, {
     Map<String, dynamic>? query,
     Map<String, dynamic>? headers, 
@@ -26,7 +26,9 @@ class ApiService {
     return await _dio.post(
       path, 
       data: data, 
-      options: Options(headers: headers), 
+      options: Options(headers: headers,
+      contentType: data is FormData ? 'multipart/form-data' : 'application/json',
+      ), 
     );
   }
 

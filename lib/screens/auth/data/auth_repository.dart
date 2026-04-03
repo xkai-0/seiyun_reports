@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:seiyun_reports_app/core/network/dio_client.dart';
 import 'package:seiyun_reports_app/core/network/api_service.dart';
 import 'AuthService.dart';
@@ -18,28 +17,19 @@ class AuthRepository {
     required String role,
     required String name,
   }) async {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user == null) throw Exception('User not authenticated');
-
-    String? firebaseToken = await user.getIdToken(true);
-    if (firebaseToken == null) {
-      throw Exception('Failed to get Firebase ID Token');
-    }
 
     final response = await _authService.createUser(
-      firebaseToken: firebaseToken,
       role: role,
       name: name,
     );
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      // تحويل البيانات القادمة من السيرفر (داخل حقل data) إلى الموديل
       final userModel = UserModel.fromJson(response.data['data']);
 
-      // حفظ التوكن والدور محلياً
-      await PrefHelper.saveToken(firebaseToken);
+      await PrefHelper.saveLoginStatus(true);
       await PrefHelper.saveRole(userModel.role);
       await PrefHelper.saveUserId(userModel.id);
+      await PrefHelper.saveUserName(userModel.name);
 
       return userModel;
     } else {

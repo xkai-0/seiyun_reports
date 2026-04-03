@@ -31,7 +31,7 @@ class CitizenReportCard extends StatelessWidget {
             child: Row(
               children: [
                 CircleAvatar(
-                  backgroundImage: NetworkImage(report.authorImageUrl),
+                  backgroundImage: NetworkImage(report.user_profile),
                   radius: 20,
                 ),
                 const SizedBox(width: 10),
@@ -40,11 +40,11 @@ class CitizenReportCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        report.authorName,
+                        report.user_name,
                         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                       ),
                       Text(
-                        report.date,
+                        report.created_at,
                         style: TextStyle(color: Colors.grey[600], fontSize: 12),
                       ),
                     ],
@@ -74,10 +74,15 @@ class CitizenReportCard extends StatelessWidget {
           ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(0)),
             child: Image.network(
-              report.imageUrl,
+              report.report_image,
               height: 200,
               width: double.infinity,
               fit: BoxFit.cover,
+              //تحديد حجم الكاش للصورة لتقليل استهلاك الذاكرة (RAM)
+              cacheWidth: 400, 
+              cacheHeight: 400,
+              //  عرض أيقونة بديلة في حال فشل تحميل الصورة
+              errorBuilder: (context, error, stackTrace) => const Icon(Icons.broken_image),
             ),
           ),
 
@@ -98,7 +103,7 @@ class CitizenReportCard extends StatelessWidget {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 8),
+               /* const SizedBox(height: 8),
                 Row(
                   children: [
                     const Icon(Icons.location_on_outlined, size: 14, color: Colors.grey),
@@ -111,7 +116,7 @@ class CitizenReportCard extends StatelessWidget {
                 ),
               ],
             ),
-          ),
+          ),*/
 
           const Divider(height: 1),
 
@@ -135,7 +140,7 @@ class CitizenReportCard extends StatelessWidget {
                 ),
                 _ActionButton(
                   icon: Icons.share_outlined,
-                  label: '${report.sharesCount}',
+                  label: 'مشاركة',
                   color: Colors.grey[600]!,
                   onTap: onShare,
                 ),
@@ -149,8 +154,8 @@ class CitizenReportCard extends StatelessWidget {
             ),
           ),
 
-          // Admin Reply Section
-          if (report.adminReply != null)
+          // تعديل الرد بحيث تظهر صورة بعد معالجة البلاغ 
+          if (report.imageAfterProcessing != null)
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(12),
@@ -191,7 +196,7 @@ class CitizenReportCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    report.adminReply!,
+                   'تمت معالجة هذا البلاغ بنجاح',
                     style: TextStyle(
                       fontSize: 12, 
                       color: Theme.of(context).brightness == Brightness.dark 
@@ -199,12 +204,27 @@ class CitizenReportCard extends StatelessWidget {
                           : Colors.black87,
                     ),
                   ),
+                  const SizedBox(height: 10),
+                  ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.network(
+                  report.imageAfterProcessing!, // رابط الصورة من المودل
+                  height: 150,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                  // تظهر ايقونة اذا الصورة خربانة 
+                  errorBuilder: (context, error, stackTrace) => const Icon(Icons.broken_image),
+                
+            ),
+          ),
+        
+
                 ],
               ),
             ),
         ],
       ),
-    );
+    ),]),);
   }
 
   Color _getStatusColor(String status) {

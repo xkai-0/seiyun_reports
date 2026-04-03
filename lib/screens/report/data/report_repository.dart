@@ -1,49 +1,75 @@
 import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:seiyun_reports_app/core/utils/pref_helper.dart';
-import '../data/report_service.dart'; 
+import 'package:seiyun_reports_app/screens/report/data/report_model.dart';
+import 'package:seiyun_reports_app/screens/report/data/report_service.dart';
 
 class ReportRepository {
   final ReportService _reportService;
-
   ReportRepository(this._reportService);
-
-  Future<bool> sendNewReport({
+  //دالة ارسال بلاغ للسيرفر 
+Future<bool> sendNewReport({
     required String description,
+    required String title,
     required String type,
+    required String priority,
     required String lat,
     required String lng,
     required File imageFile, 
   }) async {
     try {
-      // 1. جلب التوكن والايدي من الشيرد برفرنس (المجلد الأب)
-      String? token = await PrefHelper.getToken();
+      // لان اليوزر ايدي متخزن بالشيرد برفرنس 
       int? userId = await PrefHelper.getUserId();
-
-      if (token == null) return false;
-
-      // 2. تجهيز الـ FormData لإرسال الصورة والبيانات
+    
+      // FormData لانه يحتوي على ملف صوره
       FormData formData = FormData.fromMap({
-        "citizen_id": userId,
+        "citizen_id": userId,//ربط البلاغ بهوية المستخدم 
+        "title": title,
         "description": description,
         "report_type": type,
+        "priority": priority,
         "lat": lat,
         "lng": lng,
         "image": await MultipartFile.fromFile(
-          imageFile.path,
-          filename: imageFile.path.split('/').last,
+          imageFile.path, // تحويل مسار الصورة الى ملف لاجل ان يتم قبوله من السيرفر
+          filename: imageFile.path.split('/').last, //استخراج اسم الملف عشان السيرفر يعرف نوعه
+          contentType: DioMediaType("image", "jpeg"), // تحديد نوع البيانات المرسلة لضمان معالجتها كصورة
         ),
       });
 
-      // 3. استدعاء السيرفس لإتمام العملية
-      final response = await _reportService.createReport(formData, token);
+      // ارسال البيانات وانتظار رد السيرفرس
+      final response = await _reportService.createReport(formData);
       
-      // إذا كان الرد 201 كما في صورتك أو 200 فهو نجاح
       return response.statusCode == 200 || response.statusCode == 201;
+    } on DioException catch (e) {
+
+    print("--- SERVER ERROR (500) DETAILS ---");
+    if (e.response != null) {
+      print("Status Code: ${e.response?.statusCode}");
+      print("Error Data: ${e.response?.data}"); 
+    } else {
+      print("Message: ${e.message}");
+    }
+    return false;
+  } catch (e) {
+    print("General Error: $e");
+    return false;
+  }
+}
+  // دالة جلب قائمة بلاغاتي 
+  Future<List<ReportModel>> fetchMyReports() async {
+    try {
+      final response = await _reportService.getMyReports();
+      if (response.statusCode == 200) {
+        List data = response.data['data']??[]; //
+        return data.map((json) => ReportModel.fromJson(json)).toList();
+      }
+      print("Response status: ${response.statusCode} but no list found");
+    return [];
     } catch (e) {
-      print("خطأ في إرسال البلاغ: $e");
-      return false;
+      print("Fetch Reports Error: $e");
+      return [];
     }
   }
-  
 }

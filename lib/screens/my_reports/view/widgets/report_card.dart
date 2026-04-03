@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:seiyun_reports_app/screens/my_reports/data/models/report_model.dart';
+import 'package:seiyun_reports_app/screens/report/data/report_model.dart';
 
 class ReportCard extends StatelessWidget {
   final ReportModel report;
@@ -10,10 +10,10 @@ class ReportCard extends StatelessWidget {
   Widget build(BuildContext context) {
     Color statusColor;
     switch (report.status) {
-      case 'قيد المعالجة':
+      case 'قيد الإنتظار':
         statusColor = Colors.orange;
         break;
-      case 'تم الإنجاز':
+      case 'تم الحل':
         statusColor = Colors.green;
         break;
       default:
@@ -40,7 +40,7 @@ class ReportCard extends StatelessWidget {
             Stack(
               children: [
                 Image.network(
-                  report.imageUrl,
+                  report.image,
                   height: 160,
                   width: double.infinity,
                   fit: BoxFit.cover,
@@ -70,9 +70,9 @@ class ReportCard extends StatelessWidget {
                       children: [
                         Icon(Icons.eco, color: Colors.green[400], size: 14),
                         const SizedBox(width: 5),
-                        const Text(
-                          "بيئي", // Fixed or report.category
-                          style: TextStyle(
+                        Text(
+                          report.reportType,
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 11,
                             fontWeight: FontWeight.bold,
@@ -123,6 +123,7 @@ class ReportCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   const Divider(height: 25),
+
                   Row(
                     children: [
                       const Icon(
@@ -133,7 +134,8 @@ class ReportCard extends StatelessWidget {
                       const SizedBox(width: 5),
                       Expanded(
                         child: Text(
-                          report.location,
+                          // بالباك اند عندنا احداثيات الموقع مفترض نحدد اسم الموقع 
+                          "الموقع: ${report.lat ?? '0.0'}, ${report.lng ?? '0.0'}",
                           style: TextStyle(
                             fontSize: 11,
                             color: Theme.of(context).textTheme.bodyMedium?.color,
@@ -144,7 +146,9 @@ class ReportCard extends StatelessWidget {
                       ),
                     ],
                   ),
+
                   const SizedBox(height: 10),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -157,7 +161,7 @@ class ReportCard extends StatelessWidget {
                           ),
                           const SizedBox(width: 5),
                           Text(
-                            report.date,
+                            report.createdAt,
                             style: const TextStyle(
                               fontSize: 11,
                               color: Colors.grey,

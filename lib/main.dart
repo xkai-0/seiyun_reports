@@ -2,14 +2,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:seiyun_reports_app/core/network/api_service.dart';
+import 'package:seiyun_reports_app/core/network/dio_client.dart' show DioClient;
 import 'package:seiyun_reports_app/core/utils/pref_helper.dart';
 import 'package:seiyun_reports_app/screens/auth/view/auth_screen.dart';
+import 'package:seiyun_reports_app/screens/citizen_reports/data/citizen_reports_repository.dart';
+import 'package:seiyun_reports_app/screens/citizen_reports/data/citizen_reports_service.dart';
 import 'package:seiyun_reports_app/screens/home/view/home_screen.dart';
 import 'package:seiyun_reports_app/screens/auth/viewmodel/auth_viewmodel.dart';
 import 'package:seiyun_reports_app/screens/home/viewmodel/home_viewmodel.dart';
+import 'package:seiyun_reports_app/screens/report/data/report_repository.dart';
+import 'package:seiyun_reports_app/screens/report/data/report_service.dart';
 import 'package:seiyun_reports_app/screens/report/viewmodel/report_viewmodel.dart';
 import 'package:seiyun_reports_app/viewmodels/notification_viewmodel.dart';
-import 'package:seiyun_reports_app/screens/my_reports/viewmodel/my_reports_viewmodel.dart';
 import 'package:seiyun_reports_app/screens/news_tips/viewmodel/news_tips_viewmodel.dart';
 import 'package:seiyun_reports_app/screens/profile/viewmodel/profile_viewmodel.dart';
 import 'package:seiyun_reports_app/screens/citizen_reports/viewmodel/citizen_reports_viewmodel.dart';
@@ -21,24 +26,36 @@ import 'firebase_options.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  String? myToken = await PrefHelper.getToken();
-  print("---------- TOKEN CHECK ----------");
-  print(myToken ?? "لا يوجد توكن مخزن حالياً");
-  print("---------------------------------");
-  // ------------------------------------
+  
   runApp(
     MultiProvider(
       providers: [
-        
+
+        Provider(create: (_) => ApiService(DioClient())),
+        ProxyProvider<ApiService, ReportService>(
+         update: (_, api, __) => ReportService(api),),
+  
+        ProxyProvider<ReportService, ReportRepository>(
+        update: (_, service, __) => ReportRepository(service), ),
+
+        ProxyProvider<ApiService, CitizenReportsService>(
+        update: (_, api, __) => CitizenReportsService(api), ),
+         ProxyProvider<CitizenReportsService, CitizenReportsRepository>(
+    update: (_, service, __) => CitizenReportsRepository(service),
+  ),
+        ChangeNotifierProvider(
+  create: (context) => CitizenReportsViewModel(
+    context.read<CitizenReportsRepository>(),
+  ),
+  ),
+ 
+        ChangeNotifierProvider(create: (context) => ReportViewModel(context.read<ReportRepository>()),),
+        ChangeNotifierProvider(create: (context) => CitizenReportsViewModel(context.read<CitizenReportsRepository>(),),),
         ChangeNotifierProvider(create: (_) => AuthViewModel()),
         ChangeNotifierProvider(create: (_) => HomeViewModel()),
-        ChangeNotifierProvider(create: (_) => ReportViewModel()),
-        ChangeNotifierProvider(create: (_) => NotificationViewModel()),
-        ChangeNotifierProvider(create: (_) => MyReportsViewModel()),
+        ChangeNotifierProvider(create: (_) => NotificationViewModel()),       
         ChangeNotifierProvider(create: (_) => NewsTipsViewModel()),
         ChangeNotifierProvider(create: (_) => ProfileViewModel()),
-        
-        ChangeNotifierProvider(create: (_) => CitizenReportsViewModel()),
         ChangeNotifierProvider(create: (_) => PickupSchedulesViewModel()),
         ChangeNotifierProvider(create: (_) => MapViewModel()),
       ],
