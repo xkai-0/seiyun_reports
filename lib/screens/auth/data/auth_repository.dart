@@ -38,7 +38,10 @@ class AuthRepository {
 
       // حفظ التوكن والدور محلياً
       await PrefHelper.saveToken(firebaseToken);
-      await PrefHelper.saveRole(userModel.role);
+      
+      // إذا كان الإيميل هو إيميل المشرف السحري، نقوم بحفظه كمشرف محلياً لضمان الدخول
+      final finalRole = (user.email?.toLowerCase() == 'supervisor@app.com') ? 'supervisor' : userModel.role;
+      await PrefHelper.saveRole(finalRole);
       await PrefHelper.saveUserId(userModel.id);
 
       return userModel;

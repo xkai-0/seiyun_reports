@@ -14,28 +14,40 @@ class Newsrepository {
     
   }
   Future<List<NewsModel>> fetchAllContent() async {
-  try {
-    // جلب الاخبار وجلب النصايح
-    final responseNews = await _newsService.getNews();
-    final responseTips = await _newsService.getTips();
+    try {
+      // جلب الاخبار وجلب النصايح
+      final responseNews = await _newsService.getNews();
+      final responseTips = await _newsService.getTips();
 
+      // استخدام compute لتشغيل عملية التحليل في Isolate منفصل لتجنب تعليق الواجهة
+      return await compute(_parseAllContent, {
+        'news': responseNews.data,
+        'tips': responseTips.data,
+      });
+    } catch (e) {
+      debugPrint("فشل في جلب البيانات $e");
+      return [];
+    }
+  }
+
+  // دالة ثابتة ليتم تشغيلها داخل compute
+  static List<NewsModel> _parseAllContent(Map<String, dynamic> data) {
     List<NewsModel> allData = [];
 
-    // التحقق من أن البيانات ليست نصاً (String) بل خارطة (Map)
-    var responseData = responseNews.data;
-    if (responseData is Map && responseData.containsKey('data')) {
-      List newsList = responseData['data'];
+    // تحليل الأخبار
+    var responseNewsData = data['news'];
+    if (responseNewsData is Map && responseNewsData.containsKey('data')) {
+      List newsList = responseNewsData['data'];
       allData.addAll(newsList.map((j) => NewsModel.fromJson(j)).toList());
     }
-    if (responseTips.data is Map && responseTips.data['data'] != null) {
-      List tipsList = responseTips.data['data'];
+
+    // تحليل النصائح
+    var responseTipsData = data['tips'];
+    if (responseTipsData is Map && responseTipsData.containsKey('data')) {
+      List tipsList = responseTipsData['data'];
       allData.addAll(tipsList.map((j) => NewsModel.fromJson(j)).toList());
     }
 
     return allData;
-  } catch (e) {
-    debugPrint("فشل في جلب البيانات $e");
-    return [];
   }
-}
 }

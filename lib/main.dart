@@ -17,6 +17,7 @@ import 'package:seiyun_reports_app/screens/pickup_schedules/viewmodel/pickup_sch
 import 'package:seiyun_reports_app/screens/map/viewmodel/map_viewmodel.dart';
 import 'package:seiyun_reports_app/core/theme/app_theme.dart';
 import 'firebase_options.dart';
+import 'package:seiyun_reports_app/screens/root/view/root_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -70,7 +71,7 @@ class MyApp extends StatelessWidget {
                 );
               }
               if (snapshot.hasData) {
-                return HomeScreen();
+                return const RootScreen();
               }
               return const AuthScreen();
             },

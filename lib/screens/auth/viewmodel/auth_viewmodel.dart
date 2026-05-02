@@ -63,8 +63,11 @@ class AuthViewModel extends ChangeNotifier {
         final token = await user.getIdToken();
         debugPrint("FIREBASE_TOKEN: $token");
 
+        // تحديد الدور بناءً على الإيميل (إيميل سحري للمشرف)
+        final String role = (user.email?.toLowerCase() == 'supervisor@app.com') ? 'supervisor' : 'citizens';
+
         await _authRepo.registerUser(
-          role: 'citizens',
+          role: role,
           name:
               (name != null && name.trim().isNotEmpty)
                   ? name.trim()
@@ -75,9 +78,11 @@ class AuthViewModel extends ChangeNotifier {
         return true;
       }
     } on FirebaseAuthException catch (e) {
-      _errorMessage = e.message ?? "حدث خطأ غير متوقع";
+      _errorMessage = e.message ?? "حدث خطأ في المصادقة";
     } catch (e) {
-      _errorMessage = "فشل الربط مع الخادم";
+      _errorMessage = e.toString().contains("Exception:") 
+          ? e.toString().replaceAll("Exception: ", "") 
+          : "فشل الربط مع الخادم: $e";
     }
 
     _isLoading = false;
@@ -114,7 +119,10 @@ class AuthViewModel extends ChangeNotifier {
             user.displayName ??
             (user.email != null ? user.email!.split('@')[0] : "User");
 
-        await _authRepo.registerUser(role: 'citizens', name: finalName);
+        // تحديد الدور بناءً على الإيميل (إيميل سحري للمشرف)
+        final String role = (user.email?.toLowerCase() == 'supervisor@app.com') ? 'supervisor' : 'citizens';
+
+        await _authRepo.registerUser(role: role, name: finalName);
         _isLoading = false;
         notifyListeners();
         return true;

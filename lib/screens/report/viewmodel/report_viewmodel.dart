@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
@@ -29,6 +30,17 @@ final ReportRepository _repository = ReportRepository(
 
   bool _isLoadingLocation = false;
   bool get isLoadingLocation => _isLoadingLocation;
+
+  // Phone Verification State
+  String? _verificationId;
+  bool _isPhoneVerified = false;
+  bool get isPhoneVerified => _isPhoneVerified;
+  
+  bool _isVerifying = false;
+  bool get isVerifying => _isVerifying;
+
+  String? _phoneErrorMessage;
+  String? get phoneErrorMessage => _phoneErrorMessage;
 
   void setCategory(String category) {
     _selectedCategory = category;
